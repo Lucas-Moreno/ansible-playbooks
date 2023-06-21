@@ -1,0 +1,14 @@
+---
+- name: Ajouter la clef ssh dans une vm
+  hosts: "{{ ip_address }}"
+  become: yes
+  vars_files:
+    - vars/vars_ssh_authorized_keys_vm.yml
+
+  tasks:
+    - name: Copier la clé publique SSH vers la VM
+      authorized_key:
+        user: "{{ ansible_user }}"
+        key: "{{ lookup('file', path_sshkey_pub) }}"
+        path: "{{ path_authorized_key_vm }}"
+        state: present
