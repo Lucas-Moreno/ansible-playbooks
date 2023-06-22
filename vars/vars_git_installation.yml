@@ -1,4 +1,4 @@
-git_username: "your_git_username"
-git_email: "your_git_email"
-path_gitconfig: "create_gitconfig_file_path"
-user: "your_machine_user"
+git_username: "your_username_git"
+git_email: "your_email_git"
+path_gitconfig: "path_~_vm"
+user: "your_user_vm"

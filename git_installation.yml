@@ -1,6 +1,6 @@
 ---
 - name: Installation de Git et configuration GitHub
-  hosts: localhost
+  hosts: connectvm
   become: yes
   vars_files:
     - vars/vars_git_installation.yml
@@ -14,7 +14,7 @@
 
     - name: Installer Git
       become: yes
-      yum:
+      dnf:
         name: git
         state: present
       when: not git_status.stat.exists
@@ -52,11 +52,3 @@
         name: user.email
         scope: global
         value: "{{ git_email }}"
-
-    - name: Set ssh key
-      become: yes
-      become_user: "{{ user }}"
-      shell: |
-        ssh-keygen -t rsa -b 4096 -C "{{ git_email }}" -f ~/.ssh/id_rsa -N ""
-        cat ~/.ssh/id_rsa.pub
-      register: ssh_keygen_output

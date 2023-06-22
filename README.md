@@ -9,6 +9,10 @@ Ne pas oublier de mettre les variables d'environnements du bon playbook dans le 
 
 RUN : ansible-playbook -i inventory/inventory.ini ssh_authorized_keys_vm.yml
 
-chmod 400 key
-
 Remplacer les variables d'environnements de vars_ssh_authorized_keys_vm.yml et de inventory.ini
+
+# git_installation
+
+RUN : ansible-playbook -i inventory/inventory.ini git_installation.yml
+
+Remplacer les variables d'environnements de vars_git_installation.yml et de inventory.ini
