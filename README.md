@@ -1,18 +1,10 @@
 # ansible-playbooks
 
-RUN : ansible-playbooks nom_du_playbook
+RUN tout les playbooks : ansible-playbook -i inventory/inventory.ini main_installation.yml
 
-Ne pas oublier de mettre les variables d'environnements du bon playbook dans le fichier vars
+RUN des playbooks spécifiques : ansible-playbook -i inventory/inventory.ini main_installation.yml --tags nomdutag,nomdutag2
 
+Ne pas oublier de changer les variables d'environnements des fichiers vars si elles sont appelés dans le main_installation.yml
 
-# ssh_authorized_keys_vm
+Remplacer les variables d'environnements de inventory.ini
 
-RUN : ansible-playbook -i inventory/inventory.ini ssh_authorized_keys_vm.yml
-
-Remplacer les variables d'environnements de vars_ssh_authorized_keys_vm.yml et de inventory.ini
-
-# git_installation
-
-RUN : ansible-playbook -i inventory/inventory.ini git_installation.yml
-
-Remplacer les variables d'environnements de vars_git_installation.yml et de inventory.ini
