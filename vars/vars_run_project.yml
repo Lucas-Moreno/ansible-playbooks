@@ -1,0 +1,5 @@
+name_of_folder_repo_github: "name_of_folder_repo_github"
+path_repo_github: "path_repo_github"
+path_clone_project_in_vm: "/home/debian/{{ name_of_folder_repo_github }}"
+path_clone_project_in_vm_with_docker_compose_yml: "/home/debian/{{ name_of_folder_repo_github }}/docker-compose.yml"
+vm_user: "user_vm"

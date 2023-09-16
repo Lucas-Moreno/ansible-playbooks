@@ -1,0 +1,28 @@
+# need playbook ssh_authorized_keys_vm
+
+- name: Create folder for repo Github
+  command: mkdir "{{ name_of_folder_repo_github }}"
+  become_user: "{{ vm_user }}"
+
+- name: Clone GitHub project
+  git:
+    repo: "{{ path_repo_github }}"
+    dest: "{{ path_clone_project_in_vm }}"
+  become_user: "{{ vm_user }}"
+  environment:
+    GIT_SSH_COMMAND: "ssh -o StrictHostKeyChecking=no"
+
+- name: Change directory to project path with docker-compose is in root project
+  shell: |
+    cd "{{ path_clone_project_in_vm }}"
+  become_user: "{{ vm_user }}"
+
+- name: Add ansible user to the Docker group
+  user:
+    name: "{{ vm_user }}"
+    groups: docker
+  become: yes
+
+- name: Start Docker Compose services
+  command: sudo docker-compose -f {{ path_clone_project_in_vm_with_docker_compose_yml }} up -d
+  become_user: "{{ vm_user }}"
