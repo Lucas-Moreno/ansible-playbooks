@@ -5,6 +5,7 @@
     - vars/vars_git_installation.yml
     - vars/vars_run_project.yml
     - vars/vars_ssh_authorized_keys_vm.yml
+    - vars/vars_npm_nvm.yml
 
   tasks:
     - name: Installer Python
@@ -23,7 +24,12 @@
       import_tasks: ssh_authorized_keys_vm.yml
       tags: authorized_key
 
+    - name: Install npm and nvm
+      import_tasks: npm_nvm_installation.yml
+      tags: npm_nvm
+
     # need playbook ssh_authorized_keys_vm
+    # Vérifier les .env pour que le projet se lance correctement
     - name: Run project
       import_tasks: run_project.yml
       tags: run_project
