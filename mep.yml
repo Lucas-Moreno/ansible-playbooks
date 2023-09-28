@@ -1,0 +1,37 @@
+- name: Récupérer le tag Docker pour TAG_BACK
+  shell: >
+    curl -s https://registry.hub.docker.com/v2/repositories/lucasepitech/back/tags/\?page_size=1 |
+    grep -o '"name":"[^"]*' |
+    cut -d'"' -f4
+  register: tag_back_result
+
+- name: Récupérer le tag Docker pour TAG_FRONT
+  shell: >
+    curl -s https://registry.hub.docker.com/v2/repositories/lucasepitech/front/tags/\?page_size=1 |
+    grep -o '"name":"[^"]*' |
+    cut -d'"' -f4
+  register: tag_front_result
+
+- name: Lire le contenu actuel du fichier docker-compose.yml
+  slurp:
+    src: ../docker-compose.yml
+  register: compose_file_content
+
+- name: Décoder le contenu de compose_file_content
+  set_fact:
+    decoded_compose_content: "{{ compose_file_content.content | b64decode }}"
+  when: compose_file_content.changed is false
+
+- name: Mettre à jour les tags dans le fichier docker-compose.yml
+  lineinfile:
+    path: ../docker-compose.yml
+    regexp: "^    image: lucasepitech/back:|    image: lucasepitech/front:"
+    line: "    image: lucasepitech/back:{{ tag_back_result.stdout }}\n    image: lucasepitech/front:{{ tag_front_result.stdout }}"
+  when: "tag_back_result.stdout != (decoded_compose_content | from_yaml).services['service-back'].image.split(':')[-1] or tag_front_result.stdout != (decoded_compose_content | from_yaml).services['service-front'].image.split(':')[-1]"
+
+- name: Pull GitHub project
+  git:
+    repo: "{{ path_repo_github }}"
+    dest: "{{ path_project_vm }}"
+    update: yes
+  become_user: "{{ user_vm }}"
