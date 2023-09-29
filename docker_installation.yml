@@ -47,7 +47,7 @@
 
 - name: Add Docker Repository
   apt_repository:
-    repo: deb [arch=amd64] https://download.docker.com/linux/{{ docker_os }} {{ ansible_distribution_release }} stable
+    repo: deb [arch=amd64] https://download.docker.com/linux/debian {{ ansible_distribution_release }} stable
     state: present
   when: ansible_distribution == 'Debian'
 

@@ -4,7 +4,7 @@
 
 - name: Download and install NVM for debian
   become: yes
-  become_user: debian
+  become_user: "{{ user_vm }}"
   shell: "curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash"
   args:
     executable: /bin/bash
@@ -19,7 +19,7 @@
     echo 'source "$NVM_DIR/nvm.sh"' >> ~/.bashrc  # Ajouter cette ligne au fichier ~/.bashrc
   args:
     executable: /bin/bash
-  become_user: debian
+  become_user: "{{ user_vm }}"
   environment:
     HOME: "{{ path_root_vm }}"
 
@@ -31,15 +31,19 @@
     source ~/.bashrc
   args:
     executable: /bin/bash
-  become_user: debian
+  become_user: "{{ user_vm }}"
   environment:
     HOME: "{{ path_root_vm }}"
 
 - name: Install npm
-  become: yes
-  become_user: debian
   apt:
     name: npm
+    state: present
+
+- name: Install typescript
+  npm:
+    name: typescript
+    global: yes
     state: present
 
 - name: Install ts-node globally

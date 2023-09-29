@@ -1,4 +1,4 @@
-- name: Config vm Debian
+- name: Config vm
   hosts: connectvm
   become: yes
   vars_files:
@@ -6,18 +6,18 @@
     - vars/vars_run_project.yml
     - vars/vars_ssh_authorized_keys_vm.yml
     - vars/vars_npm_nvm.yml
-    - vars/vars_mep.yml
+    # - vars/vars_mep.yml
 
   tasks:
-    - name: Installer Python
+    - name: Install Python
       import_tasks: python_installation.yml
       tags: python
 
-    - name: Installer Git
+    - name: Install Git
       import_tasks: git_installation.yml
       tags: git
 
-    - name: Installer Docker
+    - name: Install Docker
       import_tasks: docker_installation.yml
       tags: docker
 
@@ -29,12 +29,10 @@
       import_tasks: npm_nvm_installation.yml
       tags: npm_nvm
 
-    # need playbook ssh_authorized_keys_vm
-    # Vérifier les .env pour que le projet se lance correctement
     - name: Run project
       import_tasks: run_project.yml
       tags: run_project
 
-    - name: Mise en production
-      import_tasks: mep.yml
-      tags: mep
+    # - name: Mise en production
+    #   import_tasks: mep.yml
+    #   tags: mep

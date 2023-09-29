@@ -10,6 +10,6 @@ Lancement des playbooks :
 
 RUN tout les playbooks : ansible-playbook -i inventory/inventory.ini main_installation.yml
 
-RUN des playbooks spécifiques : ansible-playbook -i inventory/inventor y.ini main_installation.yml --tags nomdutag,nomdutag2
+RUN des playbooks spécifiques : ansible-playbook -i inventory/inventory.ini main_installation.yml --tags nomdutag,nomdutag2
 
 Si il y a des problèmes de connexions de mot de passe à la vm : ansible-playbook -i inventory/inventory.ini main_installation.yml --user=user_vm --extra-vars "ansible_sudo_pass=password"

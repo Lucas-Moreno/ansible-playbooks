@@ -13,7 +13,7 @@
 
 - name: Vérifier si le fichier ~/.gitconfig existe
   stat:
-    path: "{{ path_gitconfig }}"
+    path: "{{ path_gitconfig }}"
   register: gitconfig_file
 
 - name: Créer le fichier ~/.gitconfig s'il n'existe pas
@@ -24,10 +24,9 @@
     force: false
     group: sys
     owner: root
-    mode: '0777'
+    mode: "0777"
   when: not gitconfig_file.stat.exists
   register: gitconfig_created
-
 
 - name: Set Git user name
   become: yes
