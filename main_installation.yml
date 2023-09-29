@@ -6,7 +6,7 @@
     - vars/vars_run_project.yml
     - vars/vars_ssh_authorized_keys_vm.yml
     - vars/vars_npm_nvm.yml
-    # - vars/vars_mep.yml
+    - vars/vars_mep.yml
 
   tasks:
     - name: Install Python
@@ -33,6 +33,6 @@
       import_tasks: run_project.yml
       tags: run_project
 
-    # - name: Mise en production
-    #   import_tasks: mep.yml
-    #   tags: mep
+    - name: Mise en production
+      import_tasks: mep.yml
+      tags: mep

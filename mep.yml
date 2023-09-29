@@ -12,26 +12,19 @@
     cut -d'"' -f4
   register: tag_front_result
 
-- name: Lire le contenu actuel du fichier docker-compose.yml
-  slurp:
-    src: ../docker-compose.yml
-  register: compose_file_content
-
-- name: Décoder le contenu de compose_file_content
-  set_fact:
-    decoded_compose_content: "{{ compose_file_content.content | b64decode }}"
-  when: compose_file_content.changed is false
-
-- name: Mettre à jour les tags dans le fichier docker-compose.yml
+- name: Mettre à jour les tags dans le fichier .env
   lineinfile:
-    path: ../docker-compose.yml
-    regexp: "^    image: lucasepitech/back:|    image: lucasepitech/front:"
-    line: "    image: lucasepitech/back:{{ tag_back_result.stdout }}\n    image: lucasepitech/front:{{ tag_front_result.stdout }}"
-  when: "tag_back_result.stdout != (decoded_compose_content | from_yaml).services['service-back'].image.split(':')[-1] or tag_front_result.stdout != (decoded_compose_content | from_yaml).services['service-front'].image.split(':')[-1]"
+    path: /home/debian/T-CLO-901-TLS_5/.env
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  loop:
+    - { regexp: "^TAG_BACK=", line: "TAG_BACK={{ tag_back_result.stdout }}" }
+    - { regexp: "^TAG_FRONT=", line: "TAG_FRONT={{ tag_front_result.stdout }}" }
 
-- name: Pull GitHub project
-  git:
-    repo: "{{ path_repo_github }}"
-    dest: "{{ path_project_vm }}"
-    update: yes
+- name: Stop Docker Compose services
+  command: sudo docker-compose -f {{ path_clone_project_in_vm_with_docker_compose_yml }} down
+  become_user: "{{ user_vm }}"
+
+- name: Start Docker Compose services
+  command: sudo docker-compose -f {{ path_clone_project_in_vm_with_docker_compose_yml }} up -d
   become_user: "{{ user_vm }}"
